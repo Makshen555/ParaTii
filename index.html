@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Para la Agotina 🥹</title>
+
+  <!-- Tipografía -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --warm-1: #fff7e6;
+      --warm-2: #ffe9a8;
+      --accent: #d49d12;
+      --text: #5a4632;
+      --petal1: #ffd966;
+      --petal2: #ffdf7a;
+      --petal3: #ffd08a;
+      --stem: #2f8a46;
+      --ribbon: #c63b7f;
+    }
+
+    *{box-sizing: border-box}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+    body{
+      background: radial-gradient(1200px 600px at 10% 10%, #fffaf0 0%, var(--warm-1) 20%, var(--warm-2) 100%);
+      display:flex; align-items:center; justify-content:center; overflow:hidden;
+      color:var(--text); -webkit-font-smoothing:antialiased;
+    }
+
+    /* Contenedor central */
+    .card{
+      width:min(920px,94vw);
+      height:min(740px,92vh);
+      background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,250,240,0.6));
+      border-radius:24px;
+      box-shadow: 0 12px 40px rgba(40,30,20,0.12);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      position:relative; padding:32px;
+      overflow:hidden;
+    }
+
+    h1{
+      font-family: 'Dancing Script', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin:0 0 8px 0;
+      color:var(--accent);
+      letter-spacing:1px;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.6);
+    }
+
+    p.lead{
+      margin:0 0 18px 0;
+      font-size: clamp(1rem, 1.8vw, 1.4rem);
+      color:var(--text);
+      max-width:680px;
+      text-align:center;
+    }
+
+    .btn{
+      background: linear-gradient(180deg,var(--accent), #e6a81a);
+      color:white;
+      border:none;
+      padding:12px 22px;
+      border-radius:14px;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow: 0 6px 18px rgba(212,157,18,0.22);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .btn:active{ transform: translateY(1px) scale(.995); }
+    .small{
+      margin-top:10px; opacity:.9; font-size:.9rem;
+    }
+
+    /* Screens (flujos) */
+    .screen{
+      position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:32px; gap:12px; pointer-events:auto;
+      transition: opacity .6s ease, transform .6s ease;
+      backface-visibility:hidden;
+    }
+    .screen.hidden{
+      opacity:0; transform: translateY(12px) scale(.995); pointer-events:none;
+    }
+
+    /* Indicador sutil para clics */
+    .hint{
+      position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+      font-size: .9rem; color: rgba(80,60,40,.6);
+      display:flex; gap:8px; align-items:center;
+    }
+
+    /* FLORES (cada ramo creado por JS) */
+    .bouquet{
+      position: absolute;
+      transform-origin: center bottom;
+      pointer-events: none;
+      animation: bouquetPop .35s cubic-bezier(.2,.9,.2,1);
+      will-change: transform, opacity;
+    }
+    @keyframes bouquetPop{
+      0% { transform: translateY(8px) scale(.6) rotate(-6deg); opacity:0; }
+      70% { transform: translateY(-6px) scale(1.06) rotate(2deg); opacity:1; }
+      100% { transform: translateY(0) scale(1) rotate(0); opacity:1; }
+    }
+
+    .stem{
+      width:6px; height:120px; background: linear-gradient(#2f8a46, #1f5e31);
+      border-radius:6px; transform-origin: top left;
+      position:absolute; left:50%; bottom:0; transform: translateX(-50%) rotate(-6deg);
+      box-shadow: inset 0 -6px 10px rgba(0,0,0,.06);
+    }
+
+    .bundle{
+      position:absolute; left:50%; bottom:120px; transform:translateX(-50%);
+      display:flex; gap:6px; align-items:flex-end; justify-content:center;
+    }
+
+    /* Flor simple compuesta por pétalos */
+    .flower{
+      width:56px; height:56px; position:relative; display:inline-block;
+      transform-origin:center center;
+    }
+    .petal{
+      position:absolute; width:36px; height:46px; left:50%; top:50%;
+      transform-origin: 50% 80%;
+      border-radius: 60% 60% 60% 60%;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    }
+    .petal::after{
+      content:""; position:absolute; inset:0; border-radius:inherit;
+      filter: blur(.6px);
+    }
+    .center{
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:18px; height:18px; border-radius:50%;
+      background: linear-gradient(180deg,#ffe07a,#f1be3a);
+      box-shadow: inset 0 -3px 6px rgba(0,0,0,0.12);
+    }
+
+    /* Ribbon */
+    .ribbon{
+      position:absolute; left:50%; bottom:84px; transform:translateX(-50%);
+      display:flex; align-items:center; gap:6px; transform-origin:center;
+      animation: ribbonFloat 1.6s ease-in-out infinite;
+    }
+    .bow{
+      width:18px; height:18px; border-radius:6px; background:var(--ribbon);
+      transform: rotate(-20deg);
+      box-shadow: 0 4px 12px rgba(198,59,127,0.25);
+    }
+    .ribbon-tail{
+      width:6px; height:36px; background:linear-gradient(#c63b7f,#9f2b63);
+      border-radius:4px;
+    }
+    @keyframes ribbonFloat{
+      0%{ transform: translateX(-50%) translateY(0) }
+      50%{ transform: translateX(-50%) translateY(-6px) }
+      100%{ transform: translateX(-50%) translateY(0) }
+    }
+
+    /* Efecto desaparición después de X segundos */
+    .fade-away{ animation: fadeOut 1s ease forwards; animation-delay: 4s; }
+    @keyframes fadeOut{
+      0%{ opacity:1; transform: translateY(0) scale(1); filter: blur(0) }
+      100%{ opacity:0; transform: translateY(-10px) scale(.9); filter: blur(2px) }
+    }
+
+    /* Ajustes móviles */
+    @media (max-width:600px){
+      .card{ padding:18px; border-radius:18px; }
+      .stem{ height:90px; }
+      .flower{ width:48px; height:48px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="app">
+    <!-- Screens: ocultas/visibles con clase hidden -->
+    <div class="screen" id="screen1">
+      <h1>Hola... 🌻</h1>
+      <p class="lead">Tengo algo especial para ti. Toca en cualquier parte para descubrirlo paso a paso.</p>
+      <button class="btn" onclick="nextScreen(2)">Descubrir</button>
+      <div class="hint">Pista: toca la pantalla para que aparezca algo bonito ✨</div>
+    </div>
+
+    <div class="screen hidden" id="screen2">
+      <h1>💌</h1>
+      <p class="lead">No puedo mandarte un ramo por paquetería, pero espero de verdad algún día dartelo en persona, así que crearé uno aquí mismo cada vez que toques.</p>
+      <button class="btn" onclick="nextScreen(3)">Seguir</button>
+    </div>
+
+    <div class="screen hidden" id="screen3">
+      <h1>🌻 Flores Amarillas 🌻</h1>
+      <p class="lead">Sigue tocando o haciendo click — cada ramo es único.</p>
+      <button class="btn" onclick="nextScreen(4)">Ver final</button>
+    </div>
+
+    <div class="screen hidden" id="screen4">
+      <h1>🌻 Para ti</h1>
+      <p class="lead">Aunque estemos lejos, quería regalarte esto para hacerte sonreír 💛</p>
+      <p class="lead">Ily Tii 💛</p>
+      <div style="margin-top:12px"><button class="btn" onclick="resetAll()">Regresar</button></div>
+    </div>
+  </div>
+
+  <script>
+    // Manejo de pantallas
+    const screens = [...document.querySelectorAll('.screen')];
+    function nextScreen(n){
+      screens.forEach(s => s.classList.add('hidden'));
+      const target = document.getElementById('screen' + n);
+      if(target) target.classList.remove('hidden');
+      // en la pantalla 3 hacemos una pequeña lluvia automática al entrar
+      if(n === 3) quickBurst();
+      if(n === 4) finalBurst();
+    }
+
+    function resetAll(){
+      screens.forEach(s => s.classList.remove('hidden'));
+      document.getElementById('screen2').classList.add('hidden');
+      document.getElementById('screen3').classList.add('hidden');
+      document.getElementById('screen4').classList.add('hidden');
+      document.getElementById('screen1').classList.remove('hidden');
+    }
+
+    // Crear ramo en la posición de click
+    document.addEventListener('click', function(e){
+      // si clic en botón que navega, dejar que la acción ocurra pero aún crear ramo
+      createBouquetAt(e.clientX, e.clientY);
+    });
+
+    function createBouquetAt(x, y){
+      const bouquet = document.createElement('div');
+      bouquet.className = 'bouquet';
+      bouquet.style.left = (x - 60) + 'px'; // compensación para centrar
+      bouquet.style.top = (y - 160) + 'px';
+
+      // Construir el HTML del ramo (tallo + flores + lazo)
+      bouquet.innerHTML = `
+        <div class="stem" style="height:${110 + Math.random()*40|0}px; transform: translateX(-50%) rotate(${(-12 + Math.random()*24).toFixed(1)}deg)"></div>
+        <div class="bundle"></div>
+        <div class="ribbon">
+          <div class="bow"></div>
+          <div class="ribbon-tail"></div>
+          <div class="ribbon-tail" style="height:28px; transform: rotate(12deg) translateY(4px)"></div>
+        </div>
+      `;
+
+      // Generar 3-5 flores con variación
+      const bundle = bouquet.querySelector('.bundle');
+      const count = 3 + Math.floor(Math.random()*3);
+      for(let i=0;i<count;i++){
+        const fl = document.createElement('div');
+        fl.className = 'flower';
+        // color aleatorio para pétalos (diferentes tonos amarillos)
+        const petalColor = ['var(--petal1)','var(--petal2)','var(--petal3)'][Math.floor(Math.random()*3)];
+        fl.innerHTML = `
+          <div class="petal" style="background:${petalColor}; transform: rotate(${(-30 + i*30 + (Math.random()*20 - 10)).toFixed(1)}deg) translate(-50%,-50%); left:50%; top:50%;"></div>
+          <div class="petal" style="background:${petalColor}; transform: rotate(${(30 + i*20 + (Math.random()*20 - 10)).toFixed(1)}deg) translate(-50%,-50%); left:50%; top:50%;"></div>
+          <div class="petal" style="background:${petalColor}; transform: rotate(${(80 + i*10 + (Math.random()*20 - 10)).toFixed(1)}deg) translate(-50%,-50%); left:50%; top:50%;"></div>
+          <div class="center"></div>
+        `;
+        // variar tamaño y posición
+        fl.style.transform = `translateY(${(-12 + Math.random()*28).toFixed(1)}px) scale(${(0.9 + Math.random()*0.4).toFixed(2)}) rotate(${(-12 + Math.random()*24).toFixed(1)}deg)`;
+        bundle.appendChild(fl);
+      }
+
+      document.body.appendChild(bouquet);
+
+      // después de 4s se desvanece y se remueve
+      setTimeout(()=> bouquet.classList.add('fade-away'), 3800);
+      setTimeout(()=> bouquet.remove(), 5000 + (Math.random()*400) );
+    }
+
+    // Pequeñas lluvias automáticas para mejorar experiencia
+    function quickBurst(){
+      for(let i=0;i<10;i++){
+        setTimeout(()=>{
+          const x = window.innerWidth * Math.random();
+          const y = window.innerHeight * (0.3 + Math.random()*0.5);
+          createBouquetAt(x,y);
+        }, i*80);
+      }
+    }
+    function finalBurst(){
+      // mayor explosión visual para el final
+      for(let i=0;i<30;i++){
+        setTimeout(()=>{
+          const x = window.innerWidth * Math.random();
+          const y = window.innerHeight * (0.25 + Math.random()*0.6);
+          createBouquetAt(x,y);
+        }, i*60);
+      }
+    }
+
+    // Evitar creación masiva accidental (opcional): límite de ramos en pantalla
+    setInterval(()=>{
+      const current = document.querySelectorAll('.bouquet').length;
+      if(current > 30){
+        // quitar los más antiguos
+        const all = document.querySelectorAll('.bouquet');
+        for(let i=0;i<10;i++){
+          if(all[i]) all[i].remove();
+        }
+      }
+    }, 1200);
+
+    // Iniciar en pantalla 1
+    resetAll();
+  </script>
+</body>
+</html>
